@@ -18,7 +18,6 @@ NC='\033[0m'
 git config user.name "$GIT_USER"
 git config user.email "$GIT_EMAIL"
 
-# Ensure Change-ID Hook
 if [ ! -f .git/hooks/commit-msg ]; then
     echo -e "${BLUE}Downloading commit-msg hook...${NC}"
     curl -Lo .git/hooks/commit-msg "$HOOK_URL"
@@ -32,7 +31,6 @@ while true; do
     echo -e -n "\n${BLUE}Command > ${NC}"
     read -r INPUT
     
-    # Split Input into Command (CMD) and Arguments (ARG)
     CMD=$(echo "$INPUT" | awk '{print $1}')
     ARG=$(echo "$INPUT" | awk '{$1=""; print $0}' | xargs)
 
@@ -42,24 +40,36 @@ while true; do
         # --- HELP ---
         help)
             echo -e "${YELLOW}--- Shortcuts ---${NC}"
-            echo -e "  rr[1-9]     : Reword ONLY the Nth commit back (e.g. rr3)"
-            echo -e "  re[1-9]     : Edit ONLY the Nth commit back (e.g. re3)"
-            echo -e "  rr <hash>   : Reword specific hash"
-            echo -e "  re <hash>   : Edit specific hash"
-            echo -e "  rs <h1 h2>  : Squash hashes (Interactive)"
-            echo -e "  a <path>    : Git Add"
-            echo -e "  res <path>  : Git Restore / Rebase Skip"
+            echo -e "  rv <hash>   : Revert a commit (Create anti-commit)"
+            echo -e "  undo        : Undo last commit (Soft reset)"
+            echo -e "  res <path>  : Restore file (Discard local changes)"
+            echo -e "  rr[1-9]     : Reword Nth commit back"
+            echo -e "  re[1-9]     : Edit Nth commit back"
             echo -e "  cc / am     : Commit / Amend"
-            echo -e "  cpc / cpa   : Continue / Abort"
+            echo -e "  <hash>      : Cherry-pick"
+            ;;
+
+        # --- REVERT COMMIT (rv) ---
+        rv)
+            if [[ -z "$ARG" ]]; then echo -e "${RED}Missing hash.${NC}"; continue; fi
+            echo -e "${CYAN}Reverting $ARG...${NC}"
+            # --no-edit skips the text editor and commits immediately
+            git revert --no-edit "$ARG"
+            ;;
+
+        # --- UNDO LAST COMMIT (undo) ---
+        undo)
+            echo -e "${CYAN}Undoing last commit (Soft Reset)...${NC}"
+            git reset --soft HEAD~1
             ;;
 
         # --- GIT ADD (a) ---
         a)
-            if [[ -z "$ARG" ]]; then echo -e "${RED}Specify path (e.g., 'a .' or 'a folder')${NC}"; 
+            if [[ -z "$ARG" ]]; then echo -e "${RED}Specify path.${NC}"; 
             else echo -e "${CYAN}Adding $ARG...${NC}"; git add "$ARG"; fi
             ;;
 
-        # --- GIT RESTORE / REBASE SKIP (res) ---
+        # --- GIT RESTORE (res) ---
         res)
             if [[ -z "$ARG" ]]; then
                 echo -e "${CYAN}Skipping Rebase commit...${NC}"
@@ -83,46 +93,36 @@ while true; do
             git rebase -i HEAD~"$ARG"
             ;;
         
-        # --- REWORD Nth COMMIT (Fix: Only Line 1) ---
+        # --- REWORD Nth COMMIT ---
         rr[1-9])
             COUNT=${CMD:2:1}
-            echo -e "${CYAN}Rewording the commit $COUNT steps back...${NC}"
-            # '1s/^pick/reword/' -> Only changes the first line (Oldest in range)
+            echo -e "${CYAN}Rewording commit $COUNT steps back...${NC}"
             GIT_SEQUENCE_EDITOR="sed -i '1s/^pick/reword/'" git rebase -i HEAD~"$COUNT"
             ;;
 
-        # --- EDIT Nth COMMIT (Fix: Only Line 1) ---
+        # --- EDIT Nth COMMIT ---
         re[1-9])
             COUNT=${CMD:2:1}
-            echo -e "${CYAN}Editing the commit $COUNT steps back...${NC}"
-            # '1s/^pick/edit/' -> Only changes the first line
+            echo -e "${CYAN}Editing commit $COUNT steps back...${NC}"
             GIT_SEQUENCE_EDITOR="sed -i '1s/^pick/edit/'" git rebase -i HEAD~"$COUNT"
             ;;
         
         # --- REWORD SPECIFIC HASH ---
         rr)
             if [[ -z "$ARG" ]]; then echo -e "${RED}Missing hash.${NC}"; continue; fi
-            # Replace pick with reword ONLY for this hash
             GIT_SEQUENCE_EDITOR="sed -i 's/^pick $ARG/reword $ARG/'" git rebase -i "$ARG"^
             ;;
 
         # --- EDIT SPECIFIC HASH ---
         re)
             if [[ -z "$ARG" ]]; then echo -e "${RED}Missing hash.${NC}"; continue; fi
-            # Replace pick with edit ONLY for this hash
             GIT_SEQUENCE_EDITOR="sed -i 's/^pick $ARG/edit $ARG/'" git rebase -i "$ARG"^
             ;;
 
         # --- SQUASH (rs) ---
         rs)
              echo -e "${YELLOW}Opening rebase interaction.${NC}"
-             # If hashes provided, start rebase from the oldest one's parent
-             if [[ -n "$ARG" ]]; then
-                 # Just open a deep rebase so user can squash manually (safest)
-                 git rebase -i HEAD~10
-             else
-                 git rebase -i HEAD~10
-             fi
+             git rebase -i HEAD~10
              ;;
 
         # --- AMEND (am) ---
@@ -163,7 +163,6 @@ while true; do
                     git fetch "$CMD"
                 fi
             else
-                # Cherry Pick Logic
                 FULL_INPUT="$CMD $ARG"
                 for HASH in $FULL_INPUT; do
                     echo -e "${CYAN}Picking $HASH...${NC}"
@@ -178,7 +177,7 @@ while true; do
                         echo -e "${GREEN}✓ Picked $HASH${NC}"
                     else
                         echo -e "${RED}❌ Conflict on $HASH.${NC}"
-                        echo -e "${RED}Type 'cpc' to continue, 'res' to restore, 'a .' to add.${NC}"
+                        echo -e "${RED}Type 'cpc' to continue, 'res' to restore files.${NC}"
                         break 
                     fi
                 done

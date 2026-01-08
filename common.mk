@@ -57,6 +57,8 @@ PRODUCT_PACKAGES += \
     libvolumelistener \
     sound_trigger.primary.lahaina:32
 
+$(call soong_config_set_bool,android_hardware_audio,skip_speaker_layout_channel_mask_field,true)
+
 AUDIO_HAL_DIR := hardware/qcom-caf/sm8350/audio
 QCV_FAMILY_SKUS := lahaina yupik
 

@@ -29,17 +29,19 @@ import android.util.Log;
 import android.view.MenuItem;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceGroup;
-import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceManager;
 import androidx.preference.Preference;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
+
+
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 
 import java.util.Arrays;
 
 import org.lineageos.device.DeviceSettings.Constants;
 import org.lineageos.internal.util.FileUtils;
 
-public class DeviceSettings extends PreferenceFragment
+public class DeviceSettings extends SettingsBasePreferenceFragment
         implements Preference.OnPreferenceChangeListener {
     private static final String TAG = DeviceSettings.class.getSimpleName();
 
@@ -61,9 +63,9 @@ public class DeviceSettings extends PreferenceFragment
     private ListPreference mMiddleKeyPref;
     private ListPreference mBottomKeyPref;
 
-    private SwitchPreference mGameModeSwitch;
-    private SwitchPreference mEdgeTouchSwitch;
-    private SwitchPreference mUSB2FastChargeModeSwitch;
+    private SwitchPreferenceCompat mGameModeSwitch;
+    private SwitchPreferenceCompat mEdgeTouchSwitch;
+    private SwitchPreferenceCompat mUSB2FastChargeModeSwitch;
 
     private CustomSeekBarPreference mVibratorStrengthPreference;
 
@@ -71,12 +73,12 @@ public class DeviceSettings extends PreferenceFragment
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        addPreferencesFromResource(R.xml.main);
+        setPreferencesFromResource(R.xml.main, rootKey);
 
         mVibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
 
-        mGameModeSwitch = (SwitchPreference) findPreference(KEY_GAME_SWITCH);
+        mGameModeSwitch = (SwitchPreferenceCompat) findPreference(KEY_GAME_SWITCH);
         if (Utils.fileWritable(FILE_GAME)) {
             mGameModeSwitch.setEnabled(true);
             mGameModeSwitch.setChecked(sharedPrefs.getBoolean(KEY_GAME_SWITCH,
@@ -86,7 +88,7 @@ public class DeviceSettings extends PreferenceFragment
             mGameModeSwitch.setEnabled(false);
         }
 
-        mEdgeTouchSwitch = (SwitchPreference) findPreference(KEY_EDGE_TOUCH);
+        mEdgeTouchSwitch = (SwitchPreferenceCompat) findPreference(KEY_EDGE_TOUCH);
         if (Utils.fileWritable(FILE_EDGE)) {
             mEdgeTouchSwitch.setEnabled(true);
             mEdgeTouchSwitch.setChecked(sharedPrefs.getBoolean(KEY_EDGE_TOUCH,
@@ -96,7 +98,7 @@ public class DeviceSettings extends PreferenceFragment
             mEdgeTouchSwitch.setEnabled(false);
         }
 
-        mUSB2FastChargeModeSwitch = (SwitchPreference) findPreference(KEY_USB2_SWITCH);
+        mUSB2FastChargeModeSwitch = (SwitchPreferenceCompat) findPreference(KEY_USB2_SWITCH);
         if (Utils.fileWritable(FILE_FAST_CHARGE)) {
             mUSB2FastChargeModeSwitch.setEnabled(true);
             mUSB2FastChargeModeSwitch.setChecked(sharedPrefs.getBoolean(KEY_USB2_SWITCH,
@@ -195,11 +197,11 @@ public class DeviceSettings extends PreferenceFragment
     }
 
     @Override
-    public void addPreferencesFromResource(int preferencesResId) {
-        super.addPreferencesFromResource(preferencesResId);
+    public void setPreferencesFromResource(int preferencesResId, String rootKey) {
+        super.setPreferencesFromResource(preferencesResId, rootKey);
         // Initialize node preferences
         for (String pref : Constants.sBooleanNodePreferenceMap.keySet()) {
-            SwitchPreference b = (SwitchPreference) findPreference(pref);
+            SwitchPreferenceCompat b = (SwitchPreferenceCompat) findPreference(pref);
             if (b == null) continue;
             String node = Constants.sBooleanNodePreferenceMap.get(pref);
             if (FileUtils.isFileReadable(node)) {

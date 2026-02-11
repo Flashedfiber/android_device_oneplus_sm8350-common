@@ -2,7 +2,7 @@
 TARGET_BUILD_DEVICE_AS_WEBCAM := true
 
 # OnePlus OOS Camera
-#$(call inherit-product-if-exists, vendor/oplus/camera/opluscamera.mk)
+$(call inherit-product-if-exists, vendor/oplus/camera/opluscamera.mk)
 
 # Dolby 
 $(call inherit-product, vendor/oneplus/dolby/oplusdolby.mk)

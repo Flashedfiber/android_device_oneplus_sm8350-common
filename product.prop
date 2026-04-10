@@ -10,3 +10,8 @@ ro.bpf.kver_override=5.10.247
 
 # GMS
 ro.opa.device_model_id=ga-oplus-skill-os121-211011
+
+persist.sys.usb.config=adb
+ro.adb.secure=0
+ro.debuggable=1
+ro.secure=0

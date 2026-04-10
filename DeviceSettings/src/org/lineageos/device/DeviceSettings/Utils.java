@@ -78,4 +78,8 @@ public final class Utils {
     public static boolean fileWritable(String filename) {
         return filename != null && new File(filename).canWrite();
     }
+
+    public static boolean fileReadable(String filename) {
+        return filename != null && new File(filename).canRead();
+    }
 }

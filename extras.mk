@@ -15,8 +15,6 @@ PRODUCT_SYSTEM_PROPERTIES += \
     pm.sleep_mode=1 \
     ro.iorapd.enable=false \
     iorapd.perfetto.enable=false \
-    persist.sys.perf.scroll_opt=true \
-    persist.sys.perf.scroll_opt.heavy_app=1 \
     ro.hwui.texture_cache_size=128 \
     ro.hwui.layer_cache_size=64 \
     ro.hwui.r_buffer_cache_size=16 \
@@ -28,8 +26,3 @@ PRODUCT_SYSTEM_PROPERTIES += \
     ro.hwui.text_small_cache_height=2048 \
     ro.hwui.text_large_cache_width=4096 \
     ro.hwui.text_large_cache_height=2048
-
-
-PRODUCT_VENDOR_PROPERTIES += \
-    vendor.post_boot.parsed=1
-

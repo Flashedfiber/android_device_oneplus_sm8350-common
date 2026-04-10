@@ -38,7 +38,6 @@ import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 import android.util.ArrayMap;
 import java.util.Map;
 import org.lineageos.device.DeviceSettings.powertools.PowerProfileUtil;
-import org.lineageos.internal.util.FileUtils;
 
 public class DeviceSettings extends SettingsBasePreferenceFragment
         implements Preference.OnPreferenceChangeListener {
@@ -155,14 +154,14 @@ public class DeviceSettings extends SettingsBasePreferenceFragment
         
 
         String node = sBooleanNodePreferenceMap.get(key);
-        if (!TextUtils.isEmpty(node) && FileUtils.isFileWritable(node)) {
-            FileUtils.writeLine(node, (Boolean) newValue ? "1" : "0");
+        if (!TextUtils.isEmpty(node) && Utils.fileWritable(node)) {
+            Utils.writeValue(node, (Boolean) newValue ? "1" : "0");
             return true;
         }
         
         node = sStringNodePreferenceMap.get(key);
-        if (!TextUtils.isEmpty(node) && FileUtils.isFileWritable(node)) {
-            FileUtils.writeLine(node, (String) newValue);
+        if (!TextUtils.isEmpty(node) && Utils.fileWritable(node)) {
+            Utils.writeValue(node, (String) newValue);
             return true;
         }
 
@@ -206,8 +205,8 @@ public class DeviceSettings extends SettingsBasePreferenceFragment
             SwitchPreferenceCompat b = (SwitchPreferenceCompat) findPreference(pref);
             if (b == null) continue;
             String node = sBooleanNodePreferenceMap.get(pref);
-            if (FileUtils.isFileReadable(node)) {
-                b.setChecked("1".equals(FileUtils.readOneLine(node)));
+            if (Utils.fileReadable(node)) {
+                b.setChecked("1".equals(Utils.readLine(node)));
                 b.setOnPreferenceChangeListener(this);
             } else {
                 removePref(b);
@@ -218,8 +217,8 @@ public class DeviceSettings extends SettingsBasePreferenceFragment
             ListPreference l = (ListPreference) findPreference(pref);
             if (l == null) continue;
             String node = sStringNodePreferenceMap.get(pref);
-            if (FileUtils.isFileReadable(node)) {
-                l.setValue(FileUtils.readOneLine(node));
+            if (Utils.fileReadable(node)) {
+                l.setValue(Utils.readLine(node));
                 l.setOnPreferenceChangeListener(this);
             } else {
                 removePref(l);

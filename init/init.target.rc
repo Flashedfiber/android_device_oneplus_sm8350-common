@@ -106,6 +106,11 @@ on early-boot
 # Hardware revision
 on property:ro.boot.hwlevel=*
     setprop ro.boot.hardware.revision ${ro.boot.hwc}_${ro.boot.hwlevel}_${ro.boot.hwversion}
+    setprop ro.product.manufacturer_for_attestation OnePlus
+    setprop ro.product.brand_for_attestation OnePlus
+    setprop ro.product.device_for_attestation lemonade
+    setprop ro.product.name_for_attestation "OnePlus 9 5G"
+    setprop ro.product.model_for_attestation "LE2115"
 
 on boot
     write /dev/cpuset/audio-app/cpus 1-2

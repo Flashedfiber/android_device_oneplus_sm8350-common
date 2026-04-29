@@ -1,6 +1,8 @@
 # Bluetooth
 persist.bluetooth.bqr.event_mask=0x8000000E
 persist.bluetooth.bqr.min_interval_ms=60000
+bluetooth.profile.pan.nap.enabled?=true
+bluetooth.profile.pan.panu.enabled?=true
 
 # Display
 debug.sf.enable_hwc_vds=1

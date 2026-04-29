@@ -12,10 +12,7 @@ $(call inherit-product, vendor/sony/dolby/sonydolby.mk)
 
 # System properties
 PRODUCT_SYSTEM_PROPERTIES += \
-    pm.sleep_mode=1 \
     ro.iorapd.enable=false \
     iorapd.perfetto.enable=false \
-
-PRODUCT_VENDOR_PROPERTIES += \
-    vendor.post_boot.parsed=1
-
+    libc.debug.malloc.program=android.hardware.camera.provider@2.4-service_64 \
+    libc.debug.malloc.options=rear_guard=4096

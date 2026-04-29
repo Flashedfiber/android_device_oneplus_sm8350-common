@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2015-2016 The CyanogenMod Project
-                   2017-2021 The LineageOS Project
+     Copyright (C) 2024 VoltageOS
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources>
-    <!-- Default value for proximity check on screen wake
-     NOTE ! - Enable for devices that have a fast response proximity sensor (ideally < 300ms)
-    <bool name="config_proximityCheckOnWake">true</bool>
-    <bool name="config_proximityCheckOnWakeEnabledByDefault">true</bool>-->
 
-    <!-- Whether device has screen with higher aspect ratio -->
+    <!-- CPU temperature -->
+    <integer name="config_sysCPUTempMultiplier">1000</integer>
+
+        <!-- Whether device has screen with higher aspect ratio -->
     <bool name="config_haveHigherAspectRatioScreen">true</bool>
 
     <!-- Defines the actions shown in advanced reboot submenu -->
@@ -21,4 +19,5 @@
         <item>restart_fastboot</item>
         <item>restart_systemui</item>
     </string-array>
+
 </resources>

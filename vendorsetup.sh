@@ -30,3 +30,28 @@ if [ -d "$GAMESPACE_DIR" ]; then
     
     cd ../../../
 fi
+
+# Apply Voltage patch
+VOLTAGE_DIR="vendor/voltage"
+if [ -d "$VOLTAGE_DIR" ]; then
+    echo "Checking Voltage patches..."
+    cd $VOLTAGE_DIR
+    
+    # Check if the patch is already applied
+    if git apply --check ../../$PATCH_DIR/vendor_voltage.patch 2>/dev/null; then
+        echo "Applying Voltage patch..."
+        git apply ../../$PATCH_DIR/vendor_voltage.patch >/dev/null 2>&1
+        
+        # Commit the patch so we know it's applied
+        if [ $? -eq 0 ]; then
+             git add .
+             git commit -m "vendor: apply custom patch"
+        else
+             echo "Warning: Could not apply Voltage patch."
+        fi
+    else
+        echo "Voltage patch already active or conflicts."
+    fi
+    
+    cd ../../
+fi

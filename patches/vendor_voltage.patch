@@ -1,0 +1,19 @@
+diff --git a/config/packages.mk b/config/packages.mk
+index 9a2d6bac..2a4cc9e5 100644
+--- a/config/packages.mk
++++ b/config/packages.mk
+@@ -20,12 +20,8 @@ PRODUCT_PACKAGES += \
+     LMOFreeformSidebar \
+     OmniJaws \
+     AppCompatConfig \
+-    VoltageJump
+-
+-ifeq ($(VOLTAGE_BUILD_TYPE),OFFICIAL)
+-    PRODUCT_PACKAGES += \
+-        Updater
+-endif
++    VoltageJump \
++    Updater
+ 
+ ifneq ($(PRODUCT_NO_CAMERA),true)
+ PRODUCT_PACKAGES += \

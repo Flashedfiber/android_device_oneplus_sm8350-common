@@ -85,18 +85,8 @@ persist.vendor.qcom.bluetooth.aptxadaptiver2_1_support=true
 ro.bluetooth.a2dp_offload.supported=true
 
 # Camera
-persist.vendor.camera.privapp.list=com.oplus.camera,org.codeaurora.snapcam,lv.mcprotector.mcpro24fps,com.oppo.camera,com.oppo.engineermode,com.oplus.camera
+persist.vendor.camera.privapp.list=com.oplus.camera,org.codeaurora.snapcam,lv.mcprotector.mcpro24fps
 vendor.camera.aux.packageexcludelist=org.telegram.messenger,org.thunderdog.challegram,us.zoom.videomeetings
-persist.camera.privapp.list=com.oneplus.camera,com.oppo.camera,com.oppo.engineermode,com.oplus.camera,org.telegram.messenger
-persist.sys.oem.region=OverSeas
-ro.camera.notify_nfc=1
-ro.opcamera.support=true
-ro.oplus.camera.video.beauty.switch=oplus.switch.video.beauty
-ro.oplus.camera.video_beauty.prefix=oplus.video.beauty.
-ro.oplus.system.camera.name=com.oneplus.camera
-vendor.camera.algo.jpeghwencode=0
-vendor.camera.aux.packagelist=android,com.oneplus.camera,com.oppo.camera,com.oppo.engineermode,com.oplus.camera
-vendor.vidhance.video.enabled=0
 
 # Chipset
 ro.soc.manufacturer=Qualcomm

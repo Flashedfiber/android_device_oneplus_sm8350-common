@@ -239,6 +239,8 @@ on post-fs-data
     #Create directory for tftp
     mkdir /data/vendor/tombstones 0771 system system
     mkdir /data/vendor/tombstones/rfs 0771 system system
+    mkdir /data/vendor/tombstones/wifi 0771 wifi wifi
+    restorecon_recursive /data/vendor/tombstones
 
     mkdir /data/vendor/ramdump 0771 root system
     mkdir /data/vendor/bluetooth 0770 bluetooth bluetooth

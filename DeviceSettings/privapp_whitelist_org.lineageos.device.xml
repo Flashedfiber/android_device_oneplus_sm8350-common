@@ -4,7 +4,5 @@
         <permission name="android.permission.MANAGE_GAME_MODE" />
         <permission name="android.permission.GET_TASKS" />
         <permission name="android.permission.INTERACT_ACROSS_USERS" />
-        <permission name="lineageos.permission.HARDWARE_ABSTRACTION_ACCESS" />
-        <permission name="android.permission.INJECT_EVENTS" />
     </privapp-permissions>
 </permissions>

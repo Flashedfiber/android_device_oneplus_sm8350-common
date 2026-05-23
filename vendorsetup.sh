@@ -58,3 +58,25 @@ if [ -d "$VENDOR_GMS_DIR" ]; then
     
     cd ../../
 fi
+
+# Apply frameworks/base patches
+FRAMEWORKS_BASE_DIR="frameworks/base"
+if [ -d "$FRAMEWORKS_BASE_DIR" ]; then
+    echo "Checking frameworks/base patches..."
+    cd $FRAMEWORKS_BASE_DIR
+    
+    # Check if the patches are already applied
+    git log --oneline -n 100 | grep -q "Fixed Doze screen brightness"
+    
+    # If not found, apply all three as one noise
+    if [ $? -ne 0 ]; then
+        echo "Applying AOD and Doze brightness/voltage patches..."
+        git am ../../$PATCH_DIR/9d661a537307085ebaaf35fa5f1d1de46f828240.patch >/dev/null 2>&1 || git am --abort
+        git am ../../$PATCH_DIR/170c5323c8e9d8307e817739ac6eff1983b3578b.patch >/dev/null 2>&1 || git am --abort
+        git am ../../$PATCH_DIR/6475b92097831d256eaf2a49cf40f515654bdf65.patch >/dev/null 2>&1 || git am --abort
+    else
+        echo "AOD and Doze brightness/voltage patches already active."
+    fi
+    
+    cd ../../
+fi

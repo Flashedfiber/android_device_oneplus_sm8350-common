@@ -77,6 +77,42 @@ if [ -d "$FRAMEWORKS_BASE_DIR" ]; then
     else
         echo "AOD and Doze brightness/voltage patches already active."
     fi
-    
+
     cd ../../
+fi
+
+# Apply packages/apps/Settings Wi-Fi frequency selector patch
+SETTINGS_DIR="packages/apps/Settings"
+SETTINGS_WIFI_PATCH="$PATCH_DIR/settings_wifi_frequency_selector.patch"
+if [ -d "$SETTINGS_DIR" ] && [ -f "$SETTINGS_WIFI_PATCH" ]; then
+    echo "Checking packages/apps/Settings Wi-Fi patches..."
+    cd $SETTINGS_DIR
+
+    if git apply --reverse --check ../../../$SETTINGS_WIFI_PATCH >/dev/null 2>&1; then
+        echo "packages/apps/Settings Wi-Fi frequency patch already active."
+    else
+        echo "Applying packages/apps/Settings Wi-Fi frequency patch..."
+        git apply ../../../$SETTINGS_WIFI_PATCH >/dev/null 2>&1 || \
+            echo "Warning: Could not apply packages/apps/Settings Wi-Fi patch."
+    fi
+
+    cd ../../../
+fi
+
+# Apply frameworks/opt/net/wifi WifiTrackerLib Wi-Fi frequency selector patch
+WIFITRACKER_DIR="frameworks/opt/net/wifi"
+WIFITRACKER_PATCH="$PATCH_DIR/wifitrackerlib_wifi_frequency_selector.patch"
+if [ -d "$WIFITRACKER_DIR" ] && [ -f "$WIFITRACKER_PATCH" ]; then
+    echo "Checking frameworks/opt/net/wifi Wi-Fi patches..."
+    cd $WIFITRACKER_DIR
+
+    if git apply --reverse --check ../../../../$WIFITRACKER_PATCH >/dev/null 2>&1; then
+        echo "frameworks/opt/net/wifi Wi-Fi frequency patch already active."
+    else
+        echo "Applying frameworks/opt/net/wifi Wi-Fi frequency patch..."
+        git apply ../../../../$WIFITRACKER_PATCH >/dev/null 2>&1 || \
+            echo "Warning: Could not apply frameworks/opt/net/wifi Wi-Fi patch."
+    fi
+
+    cd ../../../../
 fi

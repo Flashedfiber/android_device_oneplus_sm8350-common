@@ -1,0 +1,55 @@
+diff --git a/libs/WifiTrackerLib/src/com/android/wifitrackerlib/PasspointWifiEntry.java b/libs/WifiTrackerLib/src/com/android/wifitrackerlib/PasspointWifiEntry.java
+index 9a04208..953927f 100644
+--- a/libs/WifiTrackerLib/src/com/android/wifitrackerlib/PasspointWifiEntry.java
++++ b/libs/WifiTrackerLib/src/com/android/wifitrackerlib/PasspointWifiEntry.java
+@@ -492,6 +492,14 @@ public class PasspointWifiEntry extends WifiEntry implements WifiEntry.WifiEntry
+         return "";
+     }
+ 
++    @Override
++    @NonNull
++    public synchronized List<ScanResult> getScanResults() {
++        List<ScanResult> scanResults = new ArrayList<>(mCurrentHomeScanResults);
++        scanResults.addAll(mCurrentRoamingScanResults);
++        return scanResults;
++    }
++
+     @Override
+     public synchronized boolean isExpired() {
+         if (mSubscriptionExpirationTimeInMillis <= 0) {
+diff --git a/libs/WifiTrackerLib/src/com/android/wifitrackerlib/StandardWifiEntry.java b/libs/WifiTrackerLib/src/com/android/wifitrackerlib/StandardWifiEntry.java
+index cb783c9..c645ca9 100644
+--- a/libs/WifiTrackerLib/src/com/android/wifitrackerlib/StandardWifiEntry.java
++++ b/libs/WifiTrackerLib/src/com/android/wifitrackerlib/StandardWifiEntry.java
+@@ -329,6 +329,12 @@ public class StandardWifiEntry extends WifiEntry {
+         return mTargetWifiConfig;
+     }
+ 
++    @Override
++    @NonNull
++    public synchronized List<ScanResult> getScanResults() {
++        return new ArrayList<>(mTargetScanResults);
++    }
++
+     @Override
+     public synchronized boolean canConnect() {
+         // Check if the entry is in range.
+diff --git a/libs/WifiTrackerLib/src/com/android/wifitrackerlib/WifiEntry.java b/libs/WifiTrackerLib/src/com/android/wifitrackerlib/WifiEntry.java
+index df6cd4d..0adbaae 100644
+--- a/libs/WifiTrackerLib/src/com/android/wifitrackerlib/WifiEntry.java
++++ b/libs/WifiTrackerLib/src/com/android/wifitrackerlib/WifiEntry.java
+@@ -565,6 +565,14 @@ public class WifiEntry {
+         return null;
+     }
+ 
++    /**
++     * Returns the scan results currently associated with this entry.
++     */
++    @NonNull
++    public List<ScanResult> getScanResults() {
++        return Collections.emptyList();
++    }
++
+     /**
+      * Returns the ConnectedInfo object pertaining to an active connection.
+      *

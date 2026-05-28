@@ -5,10 +5,13 @@ TARGET_BUILD_DEVICE_AS_WEBCAM := true
 $(call soong_config_set,libcameraservice,ext_lib,//$(LOCAL_PATH):libcameraservice_extension.oneplus_sm8350)
 
 # OnePlus OOS Camera
-$(call inherit-product-if-exists, vendor/oplus/camera/opluscamera.mk)
+# $(call inherit-product-if-exists, vendor/oplus/camera/opluscamera.mk)
 
 # Dolby 
 $(call inherit-product, vendor/sony/dolby/sonydolby.mk)
+
+# Camera (GrapheneOs)
+$(call inherit-product, vendor/graphene/camera/grapheneos.mk)
 
 # System properties
 PRODUCT_SYSTEM_PROPERTIES += \
